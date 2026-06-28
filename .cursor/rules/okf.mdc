@@ -1,0 +1,72 @@
+---
+description: Enforce Open Knowledge Format (OKF) v0.1 for all knowledge docs under okf/
+globs: okf/**/*.md
+alwaysApply: false
+---
+
+# OKF documentation standard
+
+Spec: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+
+## Before editing
+
+1. Read `okf/index.md` first to understand bundle structure and existing concepts.
+2. Check `okf/log.md` for recent changes when updating established concepts.
+
+## Concept files
+
+Each concept = one `.md` file with YAML frontmatter. Required field: `type`.
+
+Recommended fields: `title`, `description`, `tags`, `timestamp` (ISO 8601).
+
+Allowed `type` values for this project (Psycology):
+
+- `Reference` — external works, authors, and sources (books, articles, talks)
+- `Research` — original analysis, synthesis, or connections authored in this project
+- `Concept` — a discrete idea or definition extracted from one or more sources
+
+### Type selection
+
+| If the concept describes… | Use type |
+|---------------------------|----------|
+| An external author, book, article, or source material | `Reference` |
+| Your own synthesis, review, or cross-source analysis | `Research` |
+| A single idea, term, or construct (shadow, archetype, mental model) | `Concept` |
+
+### Module mapping
+
+| Directory | Primary types |
+|-----------|---------------|
+| `reference/` | `Reference` |
+| `research/` | `Research` |
+| `concepts/` | `Concept` |
+
+## Structure
+
+- Link concepts with **file-relative** markdown paths so Cursor and other IDEs can open them on click
+- Do **not** use leading-slash bundle paths (`/concepts/foo.md`) — IDEs resolve those as filesystem roots
+- Same module: `./concept.md` (e.g. from `concepts/index.md` → `./cognitive-dissonance.md`)
+- Other module: `../module/concept.md` (e.g. from `reference/jung-dreams.md` → `../concepts/shadow.md`)
+- Bundle root: `./module/concept.md` (e.g. from `okf/index.md` → `./concepts/index.md`)
+- OKF spec uses logical paths like `/concepts/cognitive-dissonance.md` for documentation only — not in markdown link targets
+- Prefer structural markdown: headings, lists, tables — over long prose blocks
+- Use conventional sections when applicable: `# Definition`, `# Key ideas`, `# Applications`, `# Examples`, `# Citations`
+- Do not use `index.md` or `log.md` as concept documents
+
+## Maintenance
+
+When adding, renaming, or removing concepts:
+
+1. Update the relevant `index.md` in that directory (and root `okf/index.md` if needed)
+2. Append an entry to `okf/log.md` (newest date first, ISO `YYYY-MM-DD` headings)
+3. Set or update `timestamp` in the concept frontmatter
+
+## Reserved files
+
+- `index.md` — directory listing for progressive disclosure (no concept frontmatter except `okf_version` at bundle root)
+- `log.md` — chronological change history per OKF §7
+
+## Scope
+
+- Files under `okf/` must conform to OKF v0.1
+- Documents outside `okf/` are outside the bundle — plain markdown is fine
